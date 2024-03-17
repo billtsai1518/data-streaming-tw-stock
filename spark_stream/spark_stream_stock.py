@@ -3,7 +3,7 @@ import logging
 from cassandra.cluster import Cluster
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
-from pyspark.sql.types import StructType, StructField, StringType
+from pyspark.sql.types import StructType, StructField, StringType, DateType
 
 
 def create_keyspace(session):
@@ -19,16 +19,17 @@ def create_table(session):
     session.execute("""
     CREATE TABLE IF NOT EXISTS spark_streams_stock.tw_stock_day (
         "id" UUID PRIMARY KEY,
-        "Code" TEXT,
-        "Name" TEXT,
-        "TradeVolume" TEXT,
-        "TradeValue" TEXT,
-        "OpeningPrice" TEXT,
-        "HighestPrice" TEXT,
-        "LowestPrice" TEXT,
-        "ClosingPrice" TEXT,
-        "Change" TEXT,
-        "Transaction" TEXT);
+        "code" TEXT,
+        "name" TEXT,
+        "trade_volume" TEXT,
+        "trade_value" TEXT,
+        "opening_price" TEXT,
+        "highest_price" TEXT,
+        "lowest_price" TEXT,
+        "closing_price" TEXT,
+        "change" TEXT,
+        "transaction" TEXT,
+        "created_at" TIMESTAMP);
     """)
 
     print("Table created successfully!")
@@ -84,16 +85,17 @@ def create_cassandra_connection():
 def create_selection_df_from_kafka(spark_df):
     schema = StructType([
         StructField("id", StringType(), False),
-        StructField("Code", StringType(), False),
-        StructField("Name", StringType(), False),
-        StructField("TradeVolume", StringType(), False),
-        StructField("TradeValue", StringType(), False),
-        StructField("OpeningPrice", StringType(), False),
-        StructField("HighestPrice", StringType(), False),
-        StructField("LowestPrice", StringType(), False),
-        StructField("ClosingPrice", StringType(), False),
-        StructField("Change", StringType(), False),
-        StructField("Transaction", StringType(), False)
+        StructField("code", StringType(), False),
+        StructField("name", StringType(), False),
+        StructField("trade_volume", StringType(), False),
+        StructField("trade_value", StringType(), False),
+        StructField("opening_price", StringType(), False),
+        StructField("highest_price", StringType(), False),
+        StructField("lowest_price", StringType(), False),
+        StructField("closing_price", StringType(), False),
+        StructField("change", StringType(), False),
+        StructField("transaction", StringType(), False),
+        StructField("created_at", DateType(), False)
     ])
 
     sel = spark_df.selectExpr("CAST(value AS STRING)") \
