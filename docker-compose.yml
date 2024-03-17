@@ -197,5 +197,11 @@ services:
       - CASSANDRA_PASSWORD=cassandra
     networks:
       - confluent
+  spark_stream_stock:
+    image: yktsai/spark_stream_stock:latest
+    depends_on:
+      - broker
+    networks: 
+      - confluent
 networks:
   confluent:
