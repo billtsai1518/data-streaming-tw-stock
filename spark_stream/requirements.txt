@@ -1,0 +1,8 @@
+py4j==0.10.9.7
+pyarrow==4.0.0
+grpcio==1.56.0
+grpcio-status==1.56.0
+googleapis-common-protos==1.56.4
+cassandra-driver==3.28.0
+spark==0.2.1
+pyspark==3.4.1
